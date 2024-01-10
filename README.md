@@ -63,3 +63,13 @@ void APawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 
 Input.GetAxis, GetButton 등으로 불러왔던 유니티와는 다르게, 부모에서 상속받아 매개변수로 값을 넘겨받아오는 식이라 조금 신선해 적어뒀다.
+
+
+
+#### 대치되는듯한 함수
+
+- 유니티에서의 게임오브젝트를 찾는(FindWith...) ->
+  언리얼의  GetPlayerPawn (Kismet/GameplayStatics.h) (player index사용)
+
+- 유니티의 캐스팅 as (예시 : Instantiate(a) **as** GameObject) ->
+  언리얼의 캐스팅 Cast<바꿀형태>(바꿀것)(예시 : Cast<A>(B))
