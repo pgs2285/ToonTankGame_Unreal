@@ -8,10 +8,11 @@
 
 Unreal 로 제작하는 첫 게임.  
 그동안 Unity는 많이 사용해보았지만, Unreal에 관심이생겨 제작해보는 첫 프로젝트이다
-우선 아래는 언리얼 코딩할때 주의할점을 기술한다.
-추후 프로젝트가 완성되면 결과물 기술
 
-### 개발 시 알아둘것!
+
+## 언리얼 내용
+
+유니티와 달랐던 내용을 위주로 서술한다.
 
 #### 1. 클래스 전방선언
 
@@ -25,13 +26,7 @@ Unreal 로 제작하는 첫 게임.
 이를 방지하기 위한것이 전방선언이다. 즉 구현부에는 #include "(사용할 헤더).h"를 할지라도, 선언부에는 전방선언으로 형태만 알려주는것이다.  
 **이렇게 된것은 클래스에 대한 정보가 없으니 포인터만 사용해야 한다**  해당 객체 할당 크기를 정확히 파악할 수 없으니, 포인터형으로 선언 시 4바이트(32bit OS에서)를 할당한다.
 
-
-
-#### 2. Default vs Instance
-
-UPROPERTY에서 편집 가능 위치 및 여러 설정들을 관리해줄 수 있다. 자세한 내용은 아래 표와 같다. 
-
-
+#### 2. UPROPERTY
 
 ![](./githubImage/graph.png)
 
@@ -43,14 +38,28 @@ Edit은 포인터 자체를 수정하겠다는 의미가 됩과
 
 
 
-#### 3. 언리얼만의 특별한 자료형 에 대해 알아보자
+#### 3. 유니티와 비슷한듯 다른 언리얼의 이동법
 
-1. USceneComponent
+```cpp
+// header에 선언해주고,
+//Pawn 클래스 내 SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) 메소드가 있는데
+// 이 메소드의 파라미터 값을 통해 Binding 한다
+void APawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+  
+  /*
+   BindAxis 파라미터
+   TEXT("MoveForward") -> Project Setting 내 `입력`에서 설정한 이름 설정
+   this -> 바인딩할 오브젝트
+   &APawn::MoveForward -> 키 값을 적용할 메소드명(매개변수 로 값이 들어
+  */
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this,&ATESTPawn::MoveForward);
+}
 
-2. 추후 추가
+
+```
 
 
 
-
-
-
+Input.GetAxis, GetButton 등으로 불러왔던 유니티와는 다르게, 부모에서 상속받아 매개변수로 값을 넘겨받아오는 식이라 조금 신선해 적어뒀다.
