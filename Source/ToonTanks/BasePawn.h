@@ -17,6 +17,7 @@ public:
 
 protected:
 	void RotateTurret(FVector LookAtTarget);
+	void Fire();
 
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess="true"))
@@ -29,6 +30,9 @@ private:
 	USceneComponent* ProjectileSpawnPoint;
 	UPROPERTY(EditAnywhere, Category="Movement")
 	float _lerpSpeed = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<class AProjectile> ProjectileClass;
 
 
 };

@@ -9,7 +9,6 @@
 Unreal 로 제작하는 첫 게임.  
 그동안 Unity는 많이 사용해보았지만, Unreal에 관심이생겨 제작해보는 첫 프로젝트이다
 
-
 ## 언리얼 내용
 
 유니티와 달랐던 내용을 위주로 서술한다.
@@ -36,8 +35,6 @@ Edit은 포인터 자체를 수정하겠다는 의미가 됩과
 
 반면 Visible은 포인터의 멤버를 노출하겠다는 의미가 된다.
 
-
-
 #### 3. 유니티와 비슷한듯 다른 언리얼의 이동법
 
 ```cpp
@@ -46,25 +43,19 @@ Edit은 포인터 자체를 수정하겠다는 의미가 됩과
 // 이 메소드의 파라미터 값을 통해 Binding 한다
 void APawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-  
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
+
   /*
    BindAxis 파라미터
    TEXT("MoveForward") -> Project Setting 내 `입력`에서 설정한 이름 설정
    this -> 바인딩할 오브젝트
    &APawn::MoveForward -> 키 값을 적용할 메소드명(매개변수 로 값이 들어
   */
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this,&ATESTPawn::MoveForward);
+    PlayerInputComponent->BindAxis(TEXT("MoveForward"),this,&ATESTPawn::MoveForward);
 }
-
-
 ```
 
-
-
 Input.GetAxis, GetButton 등으로 불러왔던 유니티와는 다르게, 부모에서 상속받아 매개변수로 값을 넘겨받아오는 식이라 조금 신선해 적어뒀다.
-
-
 
 #### 대치되는듯한 함수
 
@@ -73,3 +64,6 @@ Input.GetAxis, GetButton 등으로 불러왔던 유니티와는 다르게, 부�
 
 - 유니티의 캐스팅 as (예시 : Instantiate(a) **as** GameObject) ->
   언리얼의 캐스팅 Cast<바꿀형태>(바꿀것)(예시 : Cast<A>(B))
+
+- 유니티의 생성 Instantiate ->
+  언리얼의 생성 GetWorld() -> SpawnActor()
