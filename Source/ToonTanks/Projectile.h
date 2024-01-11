@@ -25,12 +25,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category="Movement")
 	class UProjectileMovementComponent* _projectileMovementComponent;
-	
-	UPROPERTY(EditAnywhere, Category="Combat")
-	float _projectileMaxSpeed = 1300.f;
-	
-	UPROPERTY(EditAnywhere, Category="Combat")
-	float _projectileInitialSpeed = 1300.f;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

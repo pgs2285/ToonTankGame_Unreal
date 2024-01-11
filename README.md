@@ -57,6 +57,46 @@ void APawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 Input.GetAxis, GetButton 등으로 불러왔던 유니티와는 다르게, 부모에서 상속받아 매개변수로 값을 넘겨받아오는 식이라 조금 신선해 적어뒀다.
 
+#### TSubclassOf vs 포인터로 받기 vs UClass
+
+TSubclassOf는 UClass타입의 안전성을 보장해준다.
+
+```cpp
+UPROPERTY(EditAnywhere, Category="Combat")
+AProjectile* projectileClass;
+
+UPROPERTY(EditAnywhere, Category="Combat")
+TSubclassOf<class AProjectile> ProjectileClass;
+
+UPROPERTY(EditAnywhere, Category="Combat")
+UClass* projectiles;
+
+```
+
+
+
+위 3가지의 차이점은 일단 다음 이미지를 참조해보자.
+
+
+
+![](./githubImage/pointer.png)
+
+위 이미지는 AProjectile*
+
+<img src="./githubImage/subclassOf.png" title="" alt="" width="664">
+
+위 이미지는 TSubclassOf 
+
+![](./githubImage/Uclass.png)
+
+위 이미지는 UClass*이다
+
+차이점을 보자면 먼저**Projectile로 Projectile파생 클래스를 집으려하면 인스턴스화 된것만 집을 수 있다.**
+
+두번째로**TSubclassOf를 보자면 Projectile파생 클래스에서 인스턴스가 된것이 아니라 해당 파생 클래스를 집을수 있게된다.**
+
+세번째는**UClass 인데 클래스에 관계없이 모든 클래스를 선택할 수 있어 오류에 취약하다.**
+
 #### 대치되는듯한 함수
 
 - 유니티에서의 게임오브젝트를 찾는(FindWith...) ->
