@@ -18,7 +18,7 @@ ATank :: ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	PlayerControllerRef = Cast<APlayerController>(GetController());
+	TankPlayerController = Cast<APlayerController>(GetController());
 }
 
 
@@ -26,10 +26,10 @@ void ATank::BeginPlay()
 void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    if(PlayerControllerRef)
+    if(TankPlayerController)
     {   
         FHitResult HitResult;
-        PlayerControllerRef->GetHitResultUnderCursor(
+        TankPlayerController->GetHitResultUnderCursor(
             ECollisionChannel::ECC_Visibility,
             false, 
             HitResult);
@@ -47,6 +47,14 @@ void ATank::Tick(float DeltaTime)
 
     }
 
+}
+
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction();
+    UE_LOG(LogTemp, Warning, TEXT("내 탱크 부서지는 소리"));
+    SetActorHiddenInGame(true);
+    SetActorTickEnabled(false);
 }
 
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

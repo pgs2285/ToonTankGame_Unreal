@@ -7,9 +7,24 @@
 ## 개요
 
 Unreal 로 제작하는 첫 게임.  
-그동안 Unity는 많이 사용해보았지만, Unreal에 관심이생겨 제작해보는 첫 프로젝트이다
+그동안 Unity는 많이 사용해보았지만, Unreal에 관심이생겨 제작해보는 첫 프로젝트이다.
+
+
+
+## **제작후 느낀점**
+
+1. 데미지를 주고 받는방식이 유니티에 비해 너무 힘들었다.
+   유니티는 GetComponent().SetHealth(0); 이런식이 였다면, 
+   언리얼은 delegate에 등록하고, 발사체의 Owner을 바꿔준다음, ApplyDamage호출해서야 그제서야 Damage를주는 함수를 실행시킬수 있었다. 이유야 많겠지만, 여러번 반복해봐야 검색없이 만들수 있을것같다.
+
+2. 언리얼은 이미 대부분의 함수, 기능이 완성되어 있다.
+   카메라 smooth , 카메라 shaking,  승리조건 등 유니티에선 사용자가 직접 구현해야될 기능이 이미 완성되어 있다. 언리얼에 익숙해지면 오히려 유니티가 불편해 질수도 있겠다는 생각이 들었다. 
+
+ 
 
 ## 언리얼 내용
+
+\## 언리얼 내용
 
 유니티와 달랐던 내용을 위주로 서술한다.
 
@@ -57,7 +72,7 @@ void APawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 Input.GetAxis, GetButton 등으로 불러왔던 유니티와는 다르게, 부모에서 상속받아 매개변수로 값을 넘겨받아오는 식이라 조금 신선해 적어뒀다.
 
-#### TSubclassOf vs 포인터로 받기 vs UClass
+#### 4. TSubclassOf vs 포인터로 받기 vs UClass
 
 TSubclassOf는 UClass타입의 안전성을 보장해준다.
 
@@ -70,14 +85,9 @@ TSubclassOf<class AProjectile> ProjectileClass;
 
 UPROPERTY(EditAnywhere, Category="Combat")
 UClass* projectiles;
-
 ```
 
-
-
 위 3가지의 차이점은 일단 다음 이미지를 참조해보자.
-
-
 
 ![](./githubImage/pointer.png)
 
@@ -97,6 +107,23 @@ UClass* projectiles;
 
 세번째는**UClass 인데 클래스에 관계없이 모든 클래스를 선택할 수 있어 오류에 취약하다.**
 
+
+
+#### 5. Actor vs ActorComponent
+
+똑같이 Actor가 들어가서 잠깐 햇갈렸는데...   
+
+ActorComponent는 재사용가능한 특정기능에 가깝고,
+Actor는 이러한 기능들을 조합한 오브젝트이다.
+
+즉 Scene에 배치할거면 Actor, Actor에 부착해 기능을 만들거면 ActorComponent이다.
+
+
+
+#### 6. 편리한 Unreal의 GameMode
+
+
+
 #### 대치되는듯한 함수
 
 - 유니티에서의 게임오브젝트를 찾는(FindWith...) ->
@@ -107,3 +134,9 @@ UClass* projectiles;
 
 - 유니티의 생성 Instantiate ->
   언리얼의 생성 GetWorld() -> SpawnActor()
+
+- 유니티에서의 충돌감지 OnCollisionEnter,... ->
+  언리얼의 충돌감지 OnComponentHit
+  다만 delegate에 등록시켜줄 함수는 아래를 매개변수로 가지고 있어야한다
+  
+  > OnHit(AProjectile *, void (__cdecl AProjectile::* )(AActor *,UPrimitiveComponent *,FVector,const FHitResult &), FName)

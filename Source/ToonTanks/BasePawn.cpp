@@ -25,6 +25,12 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 }
 
+void ABasePawn::HandleDestruction()
+{
+	//TODO : 시각 및 사운드 효과
+	UE_LOG(LogTemp, Warning, TEXT("부모 effect/ sound 소리"));
+}
+
 void ABasePawn::RotateTurret(FVector LookAtTarget)
 {
 	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();// 방향벡터 구하기
@@ -53,5 +59,6 @@ void ABasePawn::Fire()
 	);
 	FVector Location = ProjectileSpawnPoint -> GetComponentLocation();
 	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
-	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	Projectile->SetOwner(this);
 }

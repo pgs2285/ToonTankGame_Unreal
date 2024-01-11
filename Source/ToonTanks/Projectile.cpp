@@ -4,6 +4,8 @@
 #include "Projectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/DamageType.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 AProjectile::AProjectile()
 {
@@ -21,7 +23,8 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	_projectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	// 충돌시 OnHit callback
 }
 
 // Called every frame
@@ -29,5 +32,21 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{//Projectile 은 BasePawn에서 Spawn할 때 생성자(player or turret으로 생성자를 바꿔줌)
+
+	auto MyOwner = GetOwner();
+	if(MyOwner == nullptr) return;
+
+	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
+	auto DamageTypeClass = UDamageType::StaticClass();
+
+	if(OtherActor && OtherActor!=this && OtherActor != MyOwner)
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
+		Destroy();
+	}
 }
 
