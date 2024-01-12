@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 // Sets default values
 AProjectile::AProjectile()
 {
@@ -17,6 +18,12 @@ AProjectile::AProjectile()
 	_projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	_projectileMovementComponent->MaxSpeed = 1300.f;
 	_projectileMovementComponent->InitialSpeed = 1300.f;
+
+	TrailParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
+	TrailParticles->SetupAttachment(RootComponent);
+
+	PlayersTrailParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail Player"));
+	PlayersTrailParticles->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +45,12 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 {//Projectile 은 BasePawn에서 Spawn할 때 생성자(player or turret으로 생성자를 바꿔줌)
 
 	auto MyOwner = GetOwner();
-	if(MyOwner == nullptr) return;
+	UE_LOG(LogTemp, Warning, TEXT("OWNER : %s"), *MyOwner->GetName());
+	if(MyOwner == nullptr)  // owner아까 바꿔줬었음
+	{
+		Destroy();
+		return;
+	}
 
 	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
 	auto DamageTypeClass = UDamageType::StaticClass();
@@ -46,7 +58,15 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if(OtherActor && OtherActor!=this && OtherActor != MyOwner)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
-		Destroy();
+		if(HitParticles){
+			UGameplayStatics::SpawnEmitterAtLocation(
+				this, 
+				HitParticles, 
+				GetActorLocation(), 
+				GetActorRotation());
+		}
 	}
+	Destroy();
+
 }
 

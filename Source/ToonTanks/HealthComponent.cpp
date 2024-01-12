@@ -5,6 +5,7 @@
 // #include "GameFramework/Actor.h"
 #include "KisMet/GameplayStatics.h"
 #include "ToonTankGameMode.h"
+#include "BasePawn.h"
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
@@ -31,7 +32,12 @@ void UHealthComponent::DamageTaken(AActor *DamagedActor, float Damage, const UDa
 	if(Damage <=0.f) return ;
 
 	Health -= Damage;
-
+	if(Health < 51)
+	{
+		if(ABasePawn* pawn = Cast<ABasePawn>(DamagedActor))
+			pawn->DamagedEffectsOn();
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Damaged Target : %s \n HP : %f"), *DamagedActor->GetName(), Health);
 	if(Health <=0.f && ToonTankGameMode)
 	{
 		ToonTankGameMode->ActorDied(DamagedActor);

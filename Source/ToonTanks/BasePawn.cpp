@@ -23,12 +23,33 @@ ABasePawn::ABasePawn()
 	
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spanw Point"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
+
+
 }
 
 void ABasePawn::HandleDestruction()
 {
 	//TODO : 시각 및 사운드 효과
-	UE_LOG(LogTemp, Warning, TEXT("부모 effect/ sound 소리"));
+	if(_deathEffect){
+		UGameplayStatics::SpawnEmitterAtLocation(
+			this, 
+			_deathEffect,
+			GetActorLocation(),
+			GetActorRotation());
+	}
+}
+
+void ABasePawn::DamagedEffectsOn()
+{
+	if(!isFired){
+		UGameplayStatics::SpawnEmitterAttached(
+			_damagedEffect,
+			RootComponent,
+			TEXT("EFFECTS"),
+			FVector::ZeroVector,
+			FRotator::ZeroRotator
+		);
+	}
 }
 
 void ABasePawn::RotateTurret(FVector LookAtTarget)

@@ -11,14 +11,16 @@ Unreal 로 제작하는 첫 게임.
 
 ## **제작후 느낀점**
 
-1. 데미지를 주고 받는방식이 유니티에 비해 너무 힘들었다.
+1. 빌드를 해야 적용된다..  유니티는 cs코드를 저장하면 자동으로 컴파일후 빌드를 해줬지만, 언리얼은 빌드를 완료해야 바로 적용된다. 이거때문에 처음에 삽질 많이한듯.
+
+2. 데미지를 주고 받는방식이 유니티에 비해 너무 힘들었다.
    유니티는 GetComponent().SetHealth(0); 이런식이 였다면, 
    언리얼은 delegate에 등록하고, 발사체의 Owner을 바꿔준다음, ApplyDamage호출해서야 그제서야 Damage를주는 함수를 실행시킬수 있었다. 이유야 많겠지만, 여러번 반복해봐야 검색없이 만들수 있을것같다.
 
-2. 언리얼은 이미 대부분의 함수, 기능이 완성되어 있다.
-   카메라 smooth , 카메라 shaking,  승리조건 등 유니티에선 사용자가 직접 구현해야될 기능이 이미 완성되어 있다. 언리얼에 익숙해지면 오히려 유니티가 불편해 질수도 있겠다는 생각이 들었다. 
+3. 언리얼은 이미 대부분의 함수, 기능이 완성되어 있다.
+   카메라 smooth , 카메라 shaking,  승리조건 등 유니티에선 사용자가 직접 구현해야될 기능이 이미 완성되어 있다. 언리얼에 익숙해지면 오히려 유니티가 불편해 질수도 있겠다는 생각이 들었다.  또한 UFUNCTION(BlueprintImplementableEvent)와 같은 기능을통해 블루프린트와 c++의 유기적으로 연동할 수 있고, 간단한 UI제작면에서는 오히려  쉬웠다.
 
-3. posses, unpossess와 같은 빙의 기능이 이미 완성되어있다. 이거 이용해 게임만들어 보면 재미있을듯..?
+4. posses, unpossess와 같은 빙의 기능이 이미 완성되어있다. 이거 이용해 게임만들어 보면 재미있을듯..?
 
  
 
@@ -101,7 +103,7 @@ UClass* projectiles;
 
 위 이미지는 UClass*이다
 
-차이점을 보자면 먼저**Projectile로 Projectile파생 클래스를 집으려하면 인스턴스화 된것만 집을 수 있다.**
+차이점을 보자면 먼저**Projectile로 Projectile파생 클래스를 집으려하면 인스턴스화 된것만 집을 수 있다.** (모든 포인터가 그렇다는건 아님!! UParticleSystem 같은것은 인스턴스 아닌것도 잡을수 있으므로 상황에 맞게 쓰자.)
 
 두번째로**TSubclassOf를 보자면 Projectile파생 클래스에서 인스턴스가 된것이 아니라 해당 파생 클래스를 집을수 있게된다.**
 
@@ -121,7 +123,8 @@ Actor는 이러한 기능들을 조합한 오브젝트이다.
 #### 대치되는듯한 함수
 
 - 유니티에서의 게임오브젝트를 찾는(FindWith...) ->
-  언리얼의  GetPlayerPawn (Kismet/GameplayStatics.h) (player index사용)
+  언리얼의  GetPlayerPawn (Kismet/GameplayStatics.h) (player index사용) 혹은
+  GetAllActorsOfClass(this, 찾을class::StaticClass(), 반환받을 TArray) 
 
 - 유니티의 캐스팅 as (예시 : Instantiate(a) **as** GameObject) ->
   언리얼의 캐스팅 Cast<바꿀형태>(바꿀것)(예시 : Cast<A>(B))
