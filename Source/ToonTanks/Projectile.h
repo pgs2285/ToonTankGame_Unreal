@@ -45,6 +45,8 @@ private:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	USoundBase* HitSound; // 이미 전방선언 했으니 여기는 제외 
 	// 그래서 맨위에 올려두는 사람도 많다 취향차이
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TSubclassOf<class UCameraShakeBase> HitCameraShakeClass;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

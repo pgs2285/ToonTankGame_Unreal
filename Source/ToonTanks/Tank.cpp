@@ -43,9 +43,9 @@ void ATank::Tick(float DeltaTime)
 void ATank::HandleDestruction()
 {
     Super::HandleDestruction();
-    UE_LOG(LogTemp, Warning, TEXT("내 탱크 부서지는 소리"));
     SetActorHiddenInGame(true);
     SetActorTickEnabled(false);
+    bAlive = false;
 }
 
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
