@@ -38,6 +38,13 @@ private:
 	class UParticleSystemComponent* TrailParticles;
 	UPROPERTY(VisibleAnywhere, Category="Combat")
 	class UParticleSystemComponent* PlayersTrailParticles;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	class USoundBase* LaunchSound;
+	
+	UPROPERTY(EditAnywhere, Category="Combat")
+	USoundBase* HitSound; // 이미 전방선언 했으니 여기는 제외 
+	// 그래서 맨위에 올려두는 사람도 많다 취향차이
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

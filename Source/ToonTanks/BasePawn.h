@@ -43,6 +43,8 @@ private:
 	class UParticleSystem* _damagedEffect;
 	
 	bool isFired = false;
+	UPROPERTY(EditAnywhere, Category="Combat")
+	class USoundBase* DeathSound;
 
 
 
